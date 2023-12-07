@@ -1,15 +1,18 @@
+// gcc main.c utils.c -o main
 #include "utils.h"
 
 int main()
 {
-    char filename[100];
     int opt;
+    char path[100], filename[100];
+    char directory[] = "../instancias/", ext[] = ".txt";
+    printf("Ficheiro a ler: ");
+    fgets(filename, sizeof(filename), stdin);
+    strtok(filename, "\n");
+    strcat(filename, ext);
+    sprintf(path, "%s%s", directory, filename);
 
-     printf("Ficheiro a ler: ");
-    fgets(filename,100,stdin);
-    strtok(filename,"\n");
-
-   GraphData graph = lerDados(filename);
+    GraphData graph = lerDados(path);
 
     printf("k value: %d\n", graph.k);
     printf("Number of vertices: %d\n", graph.numVerts);

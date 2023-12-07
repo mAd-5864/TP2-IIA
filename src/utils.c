@@ -14,12 +14,11 @@ GraphData lerDados(char *filename) {
     }
 
     // Read k value from the first line
-    fscanf(file, "%d", &graph.k);
+    fscanf(file, "%*s %d", &graph.k);
 
     // Read number of vertices (numVerts) and number of edges (numEdges)
-    fscanf(file, "p edge %d %d", &graph.numVerts, &graph.numEdges);
+    fscanf(file, "%*s %*s %d %d", &graph.numVerts, &graph.numEdges);
 
-    // Allocate memory for edges
     graph.edges = (Edge *)malloc(graph.numEdges * sizeof(Edge));
 
     if (!graph.edges) {
@@ -27,7 +26,6 @@ GraphData lerDados(char *filename) {
         exit(1);
     }
 
-    // Read edge information and populate the edges array
     for (int i = 0; i < graph.numEdges; i++) {
         char type;
         fscanf(file, " %c %d %d %d", &type, &graph.edges[i].vert1, &graph.edges[i].vert2, &graph.edges[i].custo);
