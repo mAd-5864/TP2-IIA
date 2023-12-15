@@ -18,10 +18,14 @@ int main()
     printf("k value: %d\n", graph.k);
     printf("Number of vertices: %d\n", graph.numVerts);
     printf("Number of edges: %d\n", graph.numEdges);
-    printf("Edge information:\n");
-    for (int i = 0; i < graph.numEdges; i++)
+    printf("Matriz:\n");
+    for (int i = 0; i < graph.numVerts; i++)
     {
-        printf("Edge %d: %d -> %d, Cost: %d\n", i + 1, graph.edges[i].vert1, graph.edges[i].vert2, graph.edges[i].custo);
+        for (int j = 0; j < graph.numVerts; j++)
+        {
+            printf("%d\t", graph.matrix[i][j]);
+        }
+        printf("\n");
     }
 
     // inicia numeros aleatorios
@@ -51,7 +55,7 @@ int main()
             exit(1);
         }
 
-        free(graph.edges);
-
-        return 0;
+        free(graph.matrix);
     }
+    return 0;
+}
