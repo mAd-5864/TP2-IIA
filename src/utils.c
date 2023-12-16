@@ -148,17 +148,14 @@ int check_sol(int a[], int **mat, int vert)
 // Recebe:  A solu��o, a, a matriz de adjac�ncias, mat, e o n�mero de v�rtices, vert
 void repair_sol(int a[], int **mat, int vert)
 {
-    int unconnectedVertex;
-    while ((unconnectedVertex = check_sol(a, mat, vert)) != -1)
+    int unconnectedVert;
+    while ((unconnectedVert = check_sol(a, mat, vert)) != -1)
     {
-        for (int j = 0; j < vert; j++)
+        int j = random_l_h(0, vert);
+        if (unconnectedVert != j && mat[unconnectedVert][j] > 0 && a[j] == 0)
         {
-            if (unconnectedVertex != j && mat[unconnectedVertex][j] > 0 && a[j] == 0)
-            {
-                a[unconnectedVertex] = 0;
-                a[j] = 1;
-                break;
-            }
+            a[unconnectedVert] = 0;
+            a[j] = 1;
         }
     }
 }
