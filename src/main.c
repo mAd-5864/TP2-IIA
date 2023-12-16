@@ -50,11 +50,6 @@ int main()
         printf("Quantas iteracoes deseja fazer: ");
         scanf("%d", &num_iter);
 
-        // gera_sol_inicial(sol_inic, graph.numVerts, graph.k);
-        // int custo = 0;
-        // custo = calcula_fit(sol_inic, graph.matrix, graph.numVerts);
-        // escreve_sol(sol_inic, graph.numVerts);
-        // printf("\nCusto total: %d", custo);
         for (int i = 0; i < num_runs; i++)
         {
             custo_total += trepaColinas(graph, num_iter);

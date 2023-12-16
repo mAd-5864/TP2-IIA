@@ -151,7 +151,7 @@ void repair_sol(int a[], int **mat, int vert)
     int unconnectedVert;
     while ((unconnectedVert = check_sol(a, mat, vert)) != -1)
     {
-        int j = random_l_h(0, vert);
+        int j = random_l_h(0, vert - 1);
         if (unconnectedVert != j && mat[unconnectedVert][j] > 0 && a[j] == 0)
         {
             a[unconnectedVert] = 0;
