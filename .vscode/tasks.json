@@ -4,8 +4,15 @@
         {
             "label": "Build",
             "type": "shell",
-            "command": "mingw32-make",
-            "args": [],
+            "command": "gcc",
+            "args": [
+            "-g",
+            "main.c",
+            "utils.c",
+            "trepaColinas.c",
+            "-o",
+            "${fileDirname}\\${fileBasenameNoExtension}"
+        ],
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -18,7 +25,9 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                "main.c",
+                "utils.c",
+                "trepaColinas.c",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],

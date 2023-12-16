@@ -15,7 +15,8 @@ void trepaColinas(GraphData grafo, int Its)
         exit(1);
     }
 
-    gera_sol_inicial(sol_atual, grafo.numVerts);
+    gera_sol_inicial(sol_atual, grafo.numVerts, grafo.k);
+    repair_sol(sol_atual, grafo.matrix, grafo.numVerts);
     custo_atual = calcula_fit(sol_atual, grafo.matrix, grafo.numVerts);
 
     // Inicializa a melhor solução com a solução inicial
@@ -26,14 +27,19 @@ void trepaColinas(GraphData grafo, int Its)
     melhor_custo = custo_atual;
     for (int i = 0; i < Its; i++)
     {
-        // Gera uma solução na vizinhança da solução atual
+        // printf("\n\nteste\n\n");
+        //  Gera uma solução na vizinhança da solução atual
         gera_vizinho(sol_atual, nova_sol, grafo.numVerts);
-
         // Verifica se a nova solução viola alguma restrição e repara se necessário
-        vizinhancaReparacao(sol_atual, grafo.numVerts, grafo, grafo.k);
-
+        repair_sol(nova_sol, grafo.matrix, grafo.numVerts);
+        for (int i = 0; i < grafo.numVerts; ++i)
+        {
+            sol_atual[i] = nova_sol[i];
+        }
         // Avalia a nova solução
-        int novo_custo = avaliaSolucao(grafo, grafo.numVerts, sol_atual);
+        int novo_custo = calcula_fit(nova_sol, grafo.matrix, grafo.numVerts);
+        escreve_sol(nova_sol, grafo.numVerts);
+        printf("Custo total: %d\n", novo_custo);
 
         // Compara com a melhor solução encontrada até agora
         if (novo_custo < melhor_custo)
@@ -51,8 +57,14 @@ void trepaColinas(GraphData grafo, int Its)
             iteracoes_sem_melhora++;
             if (iteracoes_sem_melhora == max_iter_sem_melhora)
             {
+                printf("\nMelhor Solucao");
+                escreve_sol(melhor_solucao, grafo.numVerts);
+                printf("Custo total: %d\n", melhor_custo);
                 return;
             }
         }
     }
+    printf("\nMelhor Solucao");
+    escreve_sol(melhor_solucao, grafo.numVerts);
+    printf("Custo total: %d\n", melhor_custo);
 }

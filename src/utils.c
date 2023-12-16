@@ -42,14 +42,14 @@ GraphData lerDados(char *filename)
 }
 
 // Gera a solucao inicial
-// Parametros: solucao, numero de vertices
-void gera_sol_inicial(int *sol, int v)
+// Parametros: solucao, numero de vertices e valor k
+void gera_sol_inicial(int *sol, int v, int k)
 {
     int i, x;
 
     for (i = 0; i < v; i++)
         sol[i] = 0;
-    for (i = 0; i < v / 2; i++)
+    for (i = 0; i < k; i++)
     {
         do
             x = random_l_h(0, v - 1);
@@ -64,15 +64,11 @@ void escreve_sol(int *sol, int vert)
 {
     int i;
 
-    printf("\nConjunto A: ");
-    for (i = 0; i < vert; i++)
-        if (sol[i] == 0)
-            printf("%2d  ", i);
-    printf("\nConjunto B: ");
+    printf("\nConjunto Sol: [ ");
     for (i = 0; i < vert; i++)
         if (sol[i] == 1)
-            printf("%2d  ", i);
-    printf("\n");
+            printf("%2d  ", i + 1);
+    printf("]\n");
 }
 
 void gera_vizinho(int a[], int b[], int n)
@@ -97,28 +93,74 @@ void gera_vizinho(int a[], int b[], int n)
 
 // Calcula a qualidade de uma solu��o
 // Recebe:  A solu��o, a, a matriz de adjac�ncias, mat, e o n�mero de v�rtices, vert
-// Devolve: O custo que � o n�mero de liga��es que existem na solução
-int calcula_fit(int a[], int *mat, int vert)
+// Devolve: O custo total de todas as liga��es que existem na solução
+int calcula_fit(int a[], int **mat, int vert)
 {
-    int total = 0;
-    int i, j;
-
-    for (i = 0; i < vert; i++)
-        if (a[i] == 0)
+    int totalCost = 0;
+    for (int i = 0; i < vert; i++)
+    {
+        if (a[i] == 1)
         {
-            for (j = 0; j < vert; j++)
-                if (a[j] == 1 && *(mat + i * vert + j) == 1)
-                    total++;
+            for (int j = i + 1; j < vert; j++)
+            {
+                if (a[j] == 1)
+                {
+                    int cost = mat[i][j];
+                    if (cost > 0)
+                    { // somar custo se houver ligacao
+                        totalCost += cost;
+                    }
+                }
+            }
         }
-    return total;
+    }
+    return totalCost;
 }
 
-// copia vector b para a (tamanho n)
-void substitui(int a[], int b[], int n)
+// Verifica se uma solu��o é válida
+// Recebe:  A solu��o, a, a matriz de adjac�ncias, mat, e o n�mero de v�rtices, vert
+// Devolve: O indice do vertice que nao tem liga��es na solução
+int check_sol(int a[], int **mat, int vert)
 {
-    int i;
-    for (i = 0; i < n; i++)
-        a[i] = b[i];
+    for (int i = 0; i < vert; i++)
+    {
+        if (a[i] == 1)
+        {
+            int isConnected = 0;
+            for (int j = 0; j < vert; j++)
+            {
+                if (i != j && a[j] == 1 && mat[i][j] > 0)
+                {
+                    isConnected = 1;
+                    break;
+                }
+            }
+            if (!isConnected)
+            {
+                return i; // vertice i nao tem nenhuma ligacao aos outros
+            }
+        }
+    }
+    return -1; // Todos os vertices tem pelo menos 1 ligacao entre si
+}
+
+// Repara a solu��o se nao for válida
+// Recebe:  A solu��o, a, a matriz de adjac�ncias, mat, e o n�mero de v�rtices, vert
+void repair_sol(int a[], int **mat, int vert)
+{
+    int unconnectedVertex;
+    while ((unconnectedVertex = check_sol(a, mat, vert)) != -1)
+    {
+        for (int j = 0; j < vert; j++)
+        {
+            if (unconnectedVertex != j && mat[unconnectedVertex][j] > 0 && a[j] == 0)
+            {
+                a[unconnectedVertex] = 0;
+                a[j] = 1;
+                break;
+            }
+        }
+    }
 }
 
 // Inicializa o gerador de numeros aleatorios

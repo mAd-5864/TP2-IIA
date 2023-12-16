@@ -1,5 +1,5 @@
-// gcc main.c utils.c -o main
-#include "utils.h"
+// gcc main.c utils.c trepaColinas.c -o main
+#include "trepaColinas.h"
 
 int main()
 {
@@ -12,12 +12,13 @@ int main()
     strcat(filename, ext);
     sprintf(path, "%s%s", directory, filename);
 
+    // GraphData graph = lerDados("../instancias/test.txt");
     GraphData graph = lerDados(path);
 
     // Infos ficheiro lido
-    printf("k value: %d\n", graph.k);
-    printf("Number of vertices: %d\n", graph.numVerts);
-    printf("Number of edges: %d\n", graph.numEdges);
+    printf("Valor K: %d\n", graph.k);
+    printf("Num Vertices: %d\n", graph.numVerts);
+    printf("Ligacoes: %d\n", graph.numEdges);
     printf("Matriz:\n");
     for (int i = 0; i < graph.numVerts; i++)
     {
@@ -31,6 +32,17 @@ int main()
     // inicia numeros aleatorios
     init_rand();
 
+    // solucao inicial
+    int *sol_inic = malloc(sizeof(int) * graph.k);
+
+    int *sol_best = malloc(sizeof(int) * graph.k);
+
+    if (sol_inic == NULL || sol_best == NULL)
+    {
+        printf("Erro na alocacao de memoria\n");
+        exit(1);
+    }
+
     // Menu
     printf("1 - Trepa Colinas\n");
     printf("2 - Algoritmo Evolutivo\n");
@@ -42,19 +54,13 @@ int main()
     {
         printf("Quantas iteracoes deseja fazer: ");
         scanf("%d", &num_iter);
-        /*TREPA COLINAS*/
 
-        // solucao inicial
-        int *sol_inic = malloc(sizeof(int) * graph.k);
-
-        int *sol_best = malloc(sizeof(int) * graph.k);
-
-        if (sol_inic == NULL || sol_best == NULL)
-        {
-            printf("Erro na alocacao de memoria\n");
-            exit(1);
-        }
-
+        // gera_sol_inicial(sol_inic, graph.numVerts, graph.k);
+        // int custo = 0;
+        // custo = calcula_fit(sol_inic, graph.matrix, graph.numVerts);
+        // escreve_sol(sol_inic, graph.numVerts);
+        // printf("\nCusto total: %d", custo);
+        trepaColinas(graph, num_iter);
         free(graph.matrix);
     }
     return 0;
