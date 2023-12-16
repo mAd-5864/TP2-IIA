@@ -3,7 +3,8 @@
 
 int main()
 {
-    int opt, num_iter;
+    int opt, num_iter, num_runs, custo_total = 0;
+    float mbf = 0;
     char path[100], filename[100];
     char directory[] = "../instancias/", ext[] = ".txt";
     printf("Ficheiro a ler: ");
@@ -19,15 +20,6 @@ int main()
     printf("Valor K: %d\n", graph.k);
     printf("Num Vertices: %d\n", graph.numVerts);
     printf("Ligacoes: %d\n", graph.numEdges);
-    printf("Matriz:\n");
-    for (int i = 0; i < graph.numVerts; i++)
-    {
-        for (int j = 0; j < graph.numVerts; j++)
-        {
-            printf("%d\t", graph.matrix[i][j]);
-        }
-        printf("\n");
-    }
 
     // inicia numeros aleatorios
     init_rand();
@@ -52,6 +44,9 @@ int main()
 
     if (opt == 1)
     {
+        printf("Quantas runs deseja fazer: ");
+        scanf("%d", &num_runs);
+
         printf("Quantas iteracoes deseja fazer: ");
         scanf("%d", &num_iter);
 
@@ -60,7 +55,12 @@ int main()
         // custo = calcula_fit(sol_inic, graph.matrix, graph.numVerts);
         // escreve_sol(sol_inic, graph.numVerts);
         // printf("\nCusto total: %d", custo);
-        trepaColinas(graph, num_iter);
+        for (int i = 0; i < num_runs; i++)
+        {
+            custo_total += trepaColinas(graph, num_iter);
+        }
+        mbf = custo_total / (float)num_runs;
+        printf("\nMBF: %.3f\n", mbf);
         free(graph.matrix);
     }
     return 0;
