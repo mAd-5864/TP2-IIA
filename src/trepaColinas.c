@@ -1,7 +1,7 @@
 #include "trepaColinas.h"
 #define max_iter_sem_melhora 500
 
-int trepaColinas(GraphData grafo, int Its)
+int trepaColinas(GraphData grafo, int Its, int vizinho)
 {
     int custo_atual, melhor_custo;
     int iteracoes_sem_melhora = 0;
@@ -28,7 +28,11 @@ int trepaColinas(GraphData grafo, int Its)
     for (int i = 0; i < Its; i++)
     {
         //  Gera uma solução na vizinhança da solução atual
-        gera_vizinho(sol_atual, nova_sol, grafo.numVerts);
+        if (vizinho == 1)
+            gera_vizinho(sol_atual, nova_sol, grafo.numVerts);
+        else
+            gera_vizinho2(sol_atual, nova_sol, grafo.numVerts);
+
         // Verifica se a nova solução viola alguma restrição e repara se necessário
         repair_sol(nova_sol, grafo.matrix, grafo.numVerts);
 

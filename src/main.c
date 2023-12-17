@@ -5,7 +5,7 @@
 
 int main()
 {
-    int opt, num_iter, num_runs, custo, custo_total = 0, melhor_custo = INT_MAX;
+    int opt, num_iter, num_runs, opVizinho, custo, custo_total = 0, melhor_custo = INT_MAX;
     float mbf = 0;
     char path[100], filename[100];
     char directory[] = "../instancias/", ext[] = ".txt";
@@ -49,12 +49,14 @@ int main()
 
     if (opt == 1)
     {
+        printf("Usar vizinhanca 1 ou 2: ");
+        scanf("%d", &opVizinho);
         printf("Quantas iteracoes deseja fazer: ");
         scanf("%d", &num_iter);
 
         for (int i = 0; i < num_runs; i++)
         {
-            custo = trepaColinas(graph, num_iter);
+            custo = trepaColinas(graph, num_iter, opVizinho);
             custo_total += custo;
             if (custo < melhor_custo)
                 melhor_custo = custo;

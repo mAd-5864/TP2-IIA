@@ -19,6 +19,7 @@ GraphData lerDados(char *filename); // le dados do ficheiro e retorna grafo
 void gera_sol_inicial(int *sol, int v, int k);
 void escreve_sol(int *sol, int vert);
 void gera_vizinho(int a[], int b[], int n);
+void gera_vizinho2(int a[], int b[], int n);
 int calcula_fit(int a[], int **mat, int vert);
 int check_sol(int a[], int **mat, int vert);
 void repair_sol(int a[], int **mat, int vert);
