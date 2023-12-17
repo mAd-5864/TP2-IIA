@@ -65,14 +65,14 @@ int main()
 
         struct info d;
 
-        d.popsize = 4;
+        d.popsize = 100;
         d.pm = 0.01;
         d.pr = 0.8;
         d.tsize = 3;
         d.ro = 0.9;
         d.numGenes = graph.numVerts;
         d.capacity = graph.k;
-        d.numGenerations = 10;
+        d.numGenerations = 50;
         for (int i = 0; i < num_runs; i++)
         {
             custo_total += algoritmoEvolutivo(graph, d);

@@ -32,5 +32,5 @@ void tournament(pchrom pop, struct info d, pchrom parents);
 void genetic_operators(pchrom parents, struct info d, pchrom offspring);
 void crossover(pchrom parents, struct info d, pchrom offspring);
 void mutation(pchrom offspring, struct info d);
-float adjustOffspring(int *offspring, float fitness, struct info d);
+float adjustOffspring(int *offspring, float fitness, int **mat, struct info d);
 int algoritmoEvolutivo(GraphData grafo, struct info d);

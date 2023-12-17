@@ -19,32 +19,26 @@ int algoritmoEvolutivo(GraphData grafo, struct info d)
         // Select parents
         pchrom parents = (pchrom)malloc(sizeof(chrom) * d.popsize);
         tournament(population, d, parents);
-        // repair_sol(parents->p, grafo.matrix, d.numGenes);
 
-        for (int i = 0; i < d.popsize; i++)
-        {
-            escreve_sol(population[i].p, d.numGenes);
-            printf("Teste gen %d Custo: %.0f\n", gen, population[i].fitness);
-        }
         // // Apply crossover and mutation
-        // pchrom offspring = (pchrom)malloc(sizeof(chrom) * d.popsize);
-        // genetic_operators(parents, d, offspring);
+        pchrom offspring = (pchrom)malloc(sizeof(chrom) * d.popsize);
+        genetic_operators(parents, d, offspring);
 
-        // // Evaluate offspring
-        // // evaluate(parents, d, grafo.matrix);
-        // evaluate(offspring, d, grafo.matrix);
+        // Evaluate offspring
+        // evaluate(parents, d, grafo.matrix);
+        evaluate(offspring, d, grafo.matrix);
 
         // // Select individuals for the next generation
         // // For simplicity, just replace old population with new offspring
-        // free(population);
-        // population = offspring;
+        free(population);
+        population = offspring;
 
         // Find and save the best solution so far
         best_solution = get_best(population, d, best_solution);
 
         // Clean up memory
         free(parents);
-        // free(offspring);
+        free(offspring);
     }
 
     // Print the best solution
@@ -109,6 +103,7 @@ void evaluate(pchrom pop, struct info d, int **mat)
     for (int i = 0; i < d.popsize; i++)
     {
         pop[i].fitness = (float)calcula_fit(pop[i].p, mat, d.numGenes);
+        pop[i].fitness = adjustOffspring(pop[i].p, pop[i].fitness, mat, d);
     }
 }
 
@@ -165,8 +160,6 @@ void crossover(pchrom parents, struct info d, pchrom offspring)
             offspring[i] = parents[i];
             offspring[i + 1] = parents[i + 1];
         }
-        offspring[i].fitness = adjustOffspring(offspring[i].p, offspring[i].fitness, d);
-        offspring[i + 1].fitness = adjustOffspring(offspring[i + 1].p, offspring[i + 1].fitness, d);
     }
 }
 
@@ -188,18 +181,22 @@ void mutation(pchrom offspring, struct info d)
 
 // Penaliza o custo dos filhos se a solucao for invalida
 // Parâmetros de entrada: conjusto descendente a ser avaliado(offspring) e estrutura com parâmetros (d)
-float adjustOffspring(int *offspring, float fitness, struct info d)
+float adjustOffspring(int *offspring, float fitness, int **mat, struct info d)
 {
-    int verts = 0, pen;
+    int verts = 0;
+    float pen;
     for (int i = 0; i < d.numGenes; i++)
     {
         if (offspring[i] == 1)
             verts++;
     }
     if (d.capacity > verts)
-        pen = (d.capacity - verts) * 100;
+        pen = (d.capacity - verts) * d.numGenes;
     else
-        pen = (verts - d.capacity) * 100;
+        pen = (verts - d.capacity) * d.numGenes;
 
-    return fitness - pen;
+    if (check_sol(offspring, mat, d.numGenes) != -1)
+        pen += d.capacity;
+
+    return fitness + pen;
 }
