@@ -131,7 +131,7 @@ void genetic_operators(pchrom parents, struct info d, pchrom offspring)
 {
     crossover(parents, d, offspring); // Recombinação com um ponto de corte
 
-    // mutation(offspring, d); // Mutação binária
+    mutation(offspring, d); // Mutação binária
 }
 
 // Preenche o vector descendentes com o resultado das operações de recombinação
