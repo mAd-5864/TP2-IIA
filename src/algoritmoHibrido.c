@@ -16,30 +16,6 @@ int algoritmoHibrido(GraphData grafo, struct info d, int Its)
     chrom best_solution;
     best_solution.fitness = INT_MAX;
 
-    // 1a parte evolutiva
-    for (i = 0; i < d.numGenerations / 2; ++i)
-    {
-        // Select parents
-        pchrom parents = (pchrom)malloc(sizeof(chrom) * d.popsize);
-        tournament(population, d, parents);
-
-        // Aplicar crossover and mutation
-        pchrom offspring = (pchrom)malloc(sizeof(chrom) * d.popsize);
-        genetic_operators(parents, d, offspring);
-
-        // Evaluate offspring
-        evaluate(offspring, d, grafo.matrix);
-
-        // Select individuals for the next generation
-        free(population);
-        population = offspring;
-
-        best_solution = get_best(population, d, best_solution);
-
-        // Clean up memory
-        free(parents);
-    }
-
     // Trepa-colinas para cada solucao
     for (i = 0; i < d.popsize; ++i)
     {
@@ -76,8 +52,8 @@ int algoritmoHibrido(GraphData grafo, struct info d, int Its)
         }
     }
 
-    // 2a parte evolutiva
-    for (i = d.numGenerations / 2; i < d.numGenerations; ++i)
+    // Parte evolutiva
+    for (i = 0; i < d.numGenerations; ++i)
     {
         // Select parents
         pchrom parents = (pchrom)malloc(sizeof(chrom) * d.popsize);
