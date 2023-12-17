@@ -4,7 +4,7 @@
 
 int main()
 {
-    int opt, num_iter, num_runs, custo_total = 0;
+    int opt, num_iter, num_runs, custo, custo_total = 0, melhor_custo = INT_MAX;
     float mbf = 0;
     char path[100], filename[100];
     char directory[] = "../instancias/", ext[] = ".txt";
@@ -53,7 +53,10 @@ int main()
 
         for (int i = 0; i < num_runs; i++)
         {
-            custo_total += trepaColinas(graph, num_iter);
+            custo = trepaColinas(graph, num_iter);
+            custo_total += custo;
+            if (custo < melhor_custo)
+                melhor_custo = custo;
         }
         mbf = custo_total / (float)num_runs;
         printf("\nMBF: %.3f\n", mbf);
@@ -65,22 +68,25 @@ int main()
 
         struct info d;
 
-        d.popsize = 100;
+        d.popsize = 500;
         d.pm = 0.01;
         d.pr = 0.8;
-        d.tsize = 3;
+        d.tsize = 2;
         d.ro = 0.9;
         d.numGenes = graph.numVerts;
         d.capacity = graph.k;
-        d.numGenerations = 50;
+        d.numGenerations = graph.numEdges / 2;
         for (int i = 0; i < num_runs; i++)
         {
-            custo_total += algoritmoEvolutivo(graph, d);
+            custo = algoritmoEvolutivo(graph, d);
+            custo_total += custo;
+            if (custo < melhor_custo)
+                melhor_custo = custo;
         }
-
-        mbf = custo_total / (float)num_runs;
-        printf("\nMBF: %.3f\n", mbf);
     }
+    printf("\nMelhor Custo: %d\n", melhor_custo);
+    mbf = custo_total / (float)num_runs;
+    printf("\nMBF: %.3f\n", mbf);
 
     free(graph.matrix);
     return 0;

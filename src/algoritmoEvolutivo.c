@@ -25,7 +25,6 @@ int algoritmoEvolutivo(GraphData grafo, struct info d)
         genetic_operators(parents, d, offspring);
 
         // Evaluate offspring
-        // evaluate(parents, d, grafo.matrix);
         evaluate(offspring, d, grafo.matrix);
 
         // // Select individuals for the next generation
@@ -38,7 +37,7 @@ int algoritmoEvolutivo(GraphData grafo, struct info d)
 
         // Clean up memory
         free(parents);
-        free(offspring);
+        // free(offspring);
     }
 
     // Print the best solution
@@ -196,7 +195,7 @@ float adjustOffspring(int *offspring, float fitness, int **mat, struct info d)
         pen = (verts - d.capacity) * d.numGenes;
 
     if (check_sol(offspring, mat, d.numGenes) != -1)
-        pen += d.capacity;
+        pen += d.numGenes;
 
     return fitness + pen;
 }
