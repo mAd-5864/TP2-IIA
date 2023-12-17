@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "string.h": "c",
-        "trepacolinas.h": "c"
+        "trepacolinas.h": "c",
+        "algoritmoevolutivo.h": "c"
     }
 }

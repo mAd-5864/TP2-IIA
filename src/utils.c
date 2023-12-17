@@ -1,8 +1,5 @@
 #include "utils.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 GraphData lerDados(char *filename)
 {
     FILE *file;
@@ -158,6 +155,15 @@ void repair_sol(int a[], int **mat, int vert)
             a[j] = 1;
         }
     }
+}
+
+// Simula o lan�amento de uma moeda, retornando o valor 0 ou 1
+int flip()
+{
+    if ((((float)rand()) / RAND_MAX) < 0.5)
+        return 0;
+    else
+        return 1;
 }
 
 // Inicializa o gerador de numeros aleatorios

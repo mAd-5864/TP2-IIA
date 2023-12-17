@@ -1,5 +1,6 @@
-// gcc main.c utils.c trepaColinas.c -o main
+// gcc main.c utils.c trepaColinas.c algoritmoEvolutivo.c -o main
 #include "trepaColinas.h"
+#include "algoritmoEvolutivo.h"
 
 int main()
 {
@@ -56,7 +57,31 @@ int main()
         }
         mbf = custo_total / (float)num_runs;
         printf("\nMBF: %.3f\n", mbf);
-        free(graph.matrix);
     }
+    else if (opt == 2)
+    {
+        printf("Quantas runs deseja fazer: ");
+        scanf("%d", &num_runs);
+
+        struct info d;
+
+        d.popsize = 4;
+        d.pm = 0.01;
+        d.pr = 0.8;
+        d.tsize = 3;
+        d.ro = 0.9;
+        d.numGenes = graph.numVerts;
+        d.capacity = graph.k;
+        d.numGenerations = 10;
+        for (int i = 0; i < num_runs; i++)
+        {
+            custo_total += algoritmoEvolutivo(graph, d);
+        }
+
+        mbf = custo_total / (float)num_runs;
+        printf("\nMBF: %.3f\n", mbf);
+    }
+
+    free(graph.matrix);
     return 0;
 }
