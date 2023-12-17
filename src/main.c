@@ -1,6 +1,7 @@
-// gcc main.c utils.c trepaColinas.c algoritmoEvolutivo.c -o main
+// gcc main.c utils.c trepaColinas.c algoritmoEvolutivo.c algoritmoHibrido.c -o main
 #include "trepaColinas.h"
 #include "algoritmoEvolutivo.h"
+#include "algoritmoHibrido.h"
 
 int main()
 {
@@ -43,11 +44,11 @@ int main()
     printf("Escolha: ");
     scanf("%d", &opt);
 
+    printf("Quantas runs deseja fazer: ");
+    scanf("%d", &num_runs);
+
     if (opt == 1)
     {
-        printf("Quantas runs deseja fazer: ");
-        scanf("%d", &num_runs);
-
         printf("Quantas iteracoes deseja fazer: ");
         scanf("%d", &num_iter);
 
@@ -63,12 +64,35 @@ int main()
     }
     else if (opt == 2)
     {
-        printf("Quantas runs deseja fazer: ");
-        scanf("%d", &num_runs);
-
         struct info d;
+        printf("Qual o tamanho da populacao: ");
+        scanf("%d", &d.popsize);
+        printf("Quantas geracoes deseja fazer: ");
+        scanf("%d", &d.numGenerations);
 
-        d.popsize = 500;
+        d.pm = 0.01;
+        d.pr = 0.8;
+        d.tsize = 2;
+        d.ro = 0.9;
+        d.numGenes = graph.numVerts;
+        d.capacity = graph.k;
+        for (int i = 0; i < num_runs; i++)
+        {
+            custo = algoritmoEvolutivo(graph, d);
+            custo_total += custo;
+            if (custo < melhor_custo)
+                melhor_custo = custo;
+        }
+    }
+    else if (opt == 3)
+    {
+        struct info d;
+        printf("Qual o tamanho da populacao: ");
+        scanf("%d", &d.popsize);
+
+        printf("Quantas iteracoes deo trepa-colinas: ");
+        scanf("%d", &num_iter);
+
         d.pm = 0.01;
         d.pr = 0.8;
         d.tsize = 2;
@@ -78,12 +102,13 @@ int main()
         d.numGenerations = graph.numEdges / 2;
         for (int i = 0; i < num_runs; i++)
         {
-            custo = algoritmoEvolutivo(graph, d);
+            custo = algoritmoHibrido(graph, d, num_iter);
             custo_total += custo;
             if (custo < melhor_custo)
                 melhor_custo = custo;
         }
     }
+
     printf("\nMelhor Custo: %d\n", melhor_custo);
     mbf = custo_total / (float)num_runs;
     printf("\nMBF: %.3f\n", mbf);

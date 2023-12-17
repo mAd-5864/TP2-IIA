@@ -8,7 +8,7 @@ int algoritmoEvolutivo(GraphData grafo, struct info d)
         repair_sol(population[i].p, grafo.matrix, d.numGenes);
     }
 
-    // Evaluate initial population
+    // Evaluate populacao inicial
     evaluate(population, d, grafo.matrix);
 
     chrom best_solution;
@@ -20,19 +20,17 @@ int algoritmoEvolutivo(GraphData grafo, struct info d)
         pchrom parents = (pchrom)malloc(sizeof(chrom) * d.popsize);
         tournament(population, d, parents);
 
-        // // Apply crossover and mutation
+        // Aplicar crossover and mutation
         pchrom offspring = (pchrom)malloc(sizeof(chrom) * d.popsize);
         genetic_operators(parents, d, offspring);
 
         // Evaluate offspring
         evaluate(offspring, d, grafo.matrix);
 
-        // // Select individuals for the next generation
-        // // For simplicity, just replace old population with new offspring
+        // Select individuals for the next generation
         free(population);
         population = offspring;
 
-        // Find and save the best solution so far
         best_solution = get_best(population, d, best_solution);
 
         // Clean up memory

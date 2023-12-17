@@ -27,7 +27,6 @@ int trepaColinas(GraphData grafo, int Its)
     melhor_custo = custo_atual;
     for (int i = 0; i < Its; i++)
     {
-        // printf("\n\nteste\n\n");
         //  Gera uma solução na vizinhança da solução atual
         gera_vizinho(sol_atual, nova_sol, grafo.numVerts);
         // Verifica se a nova solução viola alguma restrição e repara se necessário
